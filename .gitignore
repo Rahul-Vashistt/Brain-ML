@@ -1,0 +1,54 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Mac/Windows system files
+.DS_Store
+Thumbs.db
+
+# Data files
+*.csv
+*.tsv
+*.xls
+*.xlsx
+*.json
+
+# Logs and dumps
+*.log
+*.out
+*.bak
+*.swp
+
+# Compiled files
+*.so
+*.dll
+*.dylib
+
+# Package distribution
+build/
+dist/
+*.egg-info/
+
+# Streamlit cache
+.streamlit/
+
+# Misc
+*.zip
+*.tar
+*.gz
