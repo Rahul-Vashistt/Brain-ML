@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+
 class BaseModel:
     def __init__(self):
         self.coef = None
@@ -8,14 +9,20 @@ class BaseModel:
     def prep_data(self,X,y):
         if isinstance(X, pd.DataFrame):
             X = X.values
+            X = np.insert(X,0,1,axis=1)
         if isinstance(y, pd.Series):
             y = y.values
         else:
             raise TypeError("Invalid Type!")
-        
-    def __lr_schedule(self,t):
-        t0,t1 = 5,50
-        return t0/(t+t1)
+        return X,y
     
     def predict(self,X):
         return np.dot(self.coef, X) + self.intercept
+    
+    @property
+    def coef_(self):
+        return self.coef
+    
+    @property
+    def intercept_(self):
+        return self.intercept

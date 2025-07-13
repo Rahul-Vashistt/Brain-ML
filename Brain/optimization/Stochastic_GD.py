@@ -1,0 +1,31 @@
+import pandas as pd
+import numpy as np
+from Brain.utils import __lr_schedule
+
+def Stochastic_GD(X,y,learning_rate,epochs):
+    thetha = np.ones(X.shape[1]) # (p+1,)
+    n = X.shape[0] # number of samples
+
+    for epoch in range(epochs):
+        indices = np.random.permutation(n)
+        X_shuffled = X[indices]
+        y_shuffled = y[indices]
+        for step in range(n):
+            x_i = X_shuffled[step]
+            y_i = y_shuffled[step]
+
+            try:
+                lr = __lr_schedule(epoch) if learning_rate is None else float(learning_rate)
+            except:
+                raise TypeError(f'Expected Integers or float But got {learning_rate}')
+
+            y_pred = thetha * x_i
+            residual = y_pred - y_i
+            Gradient_thetha = 2 * residual * x_i
+
+            thetha -= lr * Gradient_thetha
+    
+        # Convergence check
+        if np.linalg.norm(Gradient_thetha) < 1e-6:
+            break
+    return thetha
