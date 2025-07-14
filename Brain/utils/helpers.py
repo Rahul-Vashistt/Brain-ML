@@ -1,4 +1,4 @@
-from Brain.strategies import optimizers
+from Brain.method import optimizers
 
 def resolve_optimizer(name: str) -> str:
     name = name.lower()
@@ -6,10 +6,10 @@ def resolve_optimizer(name: str) -> str:
     for key, aliases in optimizers.items():
         if name in [alias.lower() for alias in aliases]:
             return key
-         
+          
     raise ValueError(f"❌ Unknown optimizer '{name}'. Valid options are: {sum(optimizers.values(), [])}") 
 
 
-def __lr_schedule(self,t: float) -> float:
+def __lr_schedule(t: float) -> float:
         t0,t1 = 5,50
         return t0/(t+t1)

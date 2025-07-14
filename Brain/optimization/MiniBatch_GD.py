@@ -3,18 +3,21 @@ import numpy as np
 from Brain.utils import __lr_schedule
 
 def Mini_Batch_GD(X,y,learning_rate,epochs,batch_size,n_batches):
-    thetha = np.ones(X.shape[1]) # (p+1,)
+    theta = np.ones(X.shape[1]) # (p+1,)
     n = X.shape[0] # number of samples
 
-    try:
-        if batch_size is not None and n_batches is None:
-            n_batches = int(np.ceil(n/batch_size))
-        elif batch_size is None and n_batches is not None:
-            batch_size = int(np.ceil(n/n_batches))
-        else:
-            raise ValueError('Provide One param, either batch_size or n_batches and the value should be an Integer')
-    except:
-        raise TypeError('Expected only Integers!')
+     # Validate batch_size / n_batches logic
+    if (batch_size is None and n_batches is None) or (batch_size is not None and n_batches is not None):
+        raise ValueError("Provide exactly one of 'batch_size' or 'n_batches'.")
+
+    if batch_size is not None:
+        if not isinstance(batch_size, int):
+            raise TypeError("batch_size must be an integer.")
+        n_batches = int(np.ceil(n / batch_size))
+    else:
+        if not isinstance(n_batches, int):
+            raise TypeError("n_batches must be an integer.")
+        batch_size = int(np.ceil(n / n_batches))
     
     for epoch in range(epochs):
         indices = np.random.permutation(n)
@@ -22,23 +25,25 @@ def Mini_Batch_GD(X,y,learning_rate,epochs,batch_size,n_batches):
         y_shuffled = y[indices]
         for batch in range(0,n,batch_size):
             start = batch
-            end = batch + batch_size
+            end = min((batch + batch_size),n)
 
             x_batch = X_shuffled[start:end]
             y_batch = y_shuffled[start:end]
 
-            try:
-                lr = __lr_schedule(epoch) if learning_rate is None else float(learning_rate)
-            except:
-                raise TypeError(f'Expected Integers or float But got {learning_rate}')
+            if learning_rate is None:
+                lr = __lr_schedule(epoch)
+            else:
+                if not isinstance(learning_rate,(float,int)):
+                    raise TypeError(f'Expected float but got {learning_rate}')
+                lr = float(learning_rate)
 
-            y_pred = np.dot(x_batch,thetha)
+            y_pred = np.dot(x_batch,theta)
             residual = y_pred - y_batch
-            Gradient_thetha = (2/batch_size) * residual @ x_batch
+            Gradient_thetha = (2/batch_size) * (x_batch.T @ residual)
 
-            thetha -= lr * Gradient_thetha
+            theta -= lr * Gradient_thetha
     
         # Convergence check
         if np.linalg.norm(Gradient_thetha) < 1e-6:
             break
-    return thetha
+    return theta

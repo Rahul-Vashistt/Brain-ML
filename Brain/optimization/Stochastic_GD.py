@@ -3,7 +3,7 @@ import numpy as np
 from Brain.utils import __lr_schedule
 
 def Stochastic_GD(X,y,learning_rate,epochs):
-    thetha = np.ones(X.shape[1]) # (p+1,)
+    theta = np.ones(X.shape[1]) # (p+1,)
     n = X.shape[0] # number of samples
 
     for epoch in range(epochs):
@@ -19,13 +19,13 @@ def Stochastic_GD(X,y,learning_rate,epochs):
             except:
                 raise TypeError(f'Expected Integers or float But got {learning_rate}')
 
-            y_pred = thetha * x_i
+            y_pred = theta * x_i
             residual = y_pred - y_i
             Gradient_thetha = 2 * residual * x_i
 
-            thetha -= lr * Gradient_thetha
+            theta -= lr * Gradient_thetha
     
         # Convergence check
         if np.linalg.norm(Gradient_thetha) < 1e-6:
             break
-    return thetha
+    return theta
