@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from Brain.utils import __lr_schedule
 
-def Batch_GD(X,y,learning_rate,epochs):
+def Batch_GD(X,y,learning_rate,epochs, tol):
     theta = np.ones(X.shape[1]) #(p+1,)
     n = X.shape[0] #number of samples
 
@@ -19,7 +19,7 @@ def Batch_GD(X,y,learning_rate,epochs):
         theta -= lr * Gradient_thetha
 
         # Convergence check
-        if np.linalg.norm(Gradient_thetha) < 1e-6:
+        if np.linalg.norm(Gradient_thetha) < tol:
             break
     return theta
 
